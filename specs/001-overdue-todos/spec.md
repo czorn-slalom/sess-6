@@ -5,6 +5,13 @@
 **Status**: Draft  
 **Input**: User description: "Support for Overdue Todo Items - As a todo application user I want to easily identify and distinguish overdue tasks in my todo list so that I can prioritize my work and quickly see which tasks are past their due date"
 
+## Clarifications
+
+### Session 2026-02-03
+
+- Q: How should "completed late" status be persisted and calculated? → A: Add a boolean field `wasOverdueWhenCompleted` set at completion time, use for display
+- Q: What specific styling should be applied beyond red text color for overdue todos? → A: Red text color + warning icon (⚠️ or similar) before title
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Visual Identification of Overdue Todos (Priority: P1)
@@ -17,7 +24,7 @@ Users can immediately identify overdue todos through distinct visual styling wit
 
 **Acceptance Scenarios**:
 
-1. **Given** I have a todo with a due date of yesterday, **When** I view the todo list, **Then** the overdue todo is displayed with distinct visual styling (red text color)
+1. **Given** I have a todo with a due date of yesterday, **When** I view the todo list, **Then** the overdue todo is displayed with distinct visual styling (red text color and warning icon ⚠️ before the title)
 2. **Given** I have a todo with a due date of today, **When** I view the todo list, **Then** the todo is NOT marked as overdue (only past dates are overdue)
 3. **Given** I have a todo with a due date in the future, **When** I view the todo list, **Then** the todo is NOT marked as overdue
 4. **Given** I have a todo with no due date, **When** I view the todo list, **Then** the todo is NOT marked as overdue
@@ -54,7 +61,7 @@ Users can see if a completed todo was completed after its due date, maintaining 
 ### Functional Requirements
 
 - **FR-001**: System MUST calculate whether a todo is overdue by comparing its due date to the current date
-- **FR-002**: System MUST display overdue todos with distinct visual styling (red text color) to differentiate them from non-overdue todos
+- **FR-002**: System MUST display overdue todos with distinct visual styling consisting of red text color and a warning icon (⚠️ or similar) displayed before the todo title
 - **FR-003**: System MUST only mark todos as overdue if their due date is in the past (before today)
 - **FR-004**: System MUST NOT mark todos as overdue if they have no due date
 - **FR-005**: System MUST NOT mark todos as overdue if their due date is today or in the future
@@ -63,6 +70,9 @@ Users can see if a completed todo was completed after its due date, maintaining 
 - **FR-008**: System MUST use the browser's local date/time to determine if a todo is overdue
 - **FR-009**: Visual styling for overdue todos MUST be consistent with the Halloween theme (orange/red color palette)
 - **FR-010**: Visual styling for overdue todos MUST work in both light and dark modes
+- **FR-011**: System MUST set the `wasOverdueWhenCompleted` boolean flag to true when a user marks an overdue todo as complete
+- **FR-012**: System MUST display completed todos with `wasOverdueWhenCompleted=true` with distinct "completed late" visual styling
+- **FR-013**: Warning icon for overdue todos MUST have appropriate alt text or aria-label for accessibility (e.g., "Overdue")
 
 ### Key Entities
 
@@ -70,11 +80,13 @@ Users can see if a completed todo was completed after its due date, maintaining 
   - `dueDate`: Date string (ISO format, optional)
   - `completed`: Boolean indicating completion status
   - `completedAt`: Timestamp when todo was marked complete (if applicable)
+  - `wasOverdueWhenCompleted`: Boolean flag set to true if the todo was overdue at the moment of completion (used for "completed late" visual indication)
   
 - **Overdue Status**: Calculated property (not persisted) determined by:
   - Current date from browser
   - Todo's `dueDate` value
   - Todo's `completed` status
+  - For completed todos: `wasOverdueWhenCompleted` flag indicates if it was completed late
 
 ## Success Criteria *(mandatory)*
 

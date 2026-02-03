@@ -51,3 +51,28 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
 }
+
+/* Overdue Todo Styling */
+.todo-overdue .todo-title {
+  color: var(--danger-color);
+}
+
+.todo-overdue .todo-due-date {
+  color: var(--danger-color);
+}
+
+.todo-overdue-icon {
+  margin-right: var(--space-xs);
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+
+/* Completed Late Styling */
+.todo-completed-late .todo-title {
+  color: var(--color-primary);
+  text-decoration: line-through;
+}
+
+.todo-completed-late .todo-due-date {
+  color: var(--color-primary);
+}

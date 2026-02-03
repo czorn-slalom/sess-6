@@ -27,7 +27,7 @@ This is a web application with monorepo structure:
 
 **Purpose**: Prepare database schema for new field
 
-- [ ] T001 Apply database migration to add wasOverdueWhenCompleted column to todos table in packages/backend/src/services/todoService.js
+- [X] T001 Apply database migration to add wasOverdueWhenCompleted column to todos table in packages/backend/src/services/todoService.js
 
 ---
 
@@ -37,12 +37,12 @@ This is a web application with monorepo structure:
 
 **⚠️ CRITICAL**: Frontend work cannot begin until backend is complete and deployed
 
-- [ ] T002 Update createTodo() method to initialize wasOverdueWhenCompleted=false in packages/backend/src/services/todoService.js
-- [ ] T003 Update updateTodo() method to set wasOverdueWhenCompleted flag on completion in packages/backend/src/services/todoService.js
-- [ ] T004 Add backend test for creating todo with wasOverdueWhenCompleted=false in packages/backend/__tests__/app.test.js
-- [ ] T005 [P] Add backend test for completing overdue todo sets flag to true in packages/backend/__tests__/app.test.js
-- [ ] T006 [P] Add backend test for completing on-time todo keeps flag false in packages/backend/__tests__/app.test.js
-- [ ] T007 [P] Add backend test for uncompleting todo resets flag to false in packages/backend/__tests__/app.test.js
+- [X] T002 Update createTodo() method to initialize wasOverdueWhenCompleted=false in packages/backend/src/services/todoService.js
+- [X] T003 Update updateTodo() method to set wasOverdueWhenCompleted flag on completion in packages/backend/src/services/todoService.js
+- [X] T004 Add backend test for creating todo with wasOverdueWhenCompleted=false in packages/backend/__tests__/app.test.js
+- [X] T005 [P] Add backend test for completing overdue todo sets flag to true in packages/backend/__tests__/app.test.js
+- [X] T006 [P] Add backend test for completing on-time todo keeps flag false in packages/backend/__tests__/app.test.js
+- [X] T007 [P] Add backend test for uncompleting todo resets flag to false in packages/backend/__tests__/app.test.js
 
 **Checkpoint**: Backend ready - frontend implementation can now begin
 
@@ -56,15 +56,15 @@ This is a web application with monorepo structure:
 
 ### Implementation for User Story 1
 
-- [ ] T008 [P] [US1] Create isOverdue utility function in packages/frontend/src/utils/ (or inline in TodoList.js)
-- [ ] T009 [P] [US1] Add CSS classes for overdue styling (.todo-overdue) in packages/frontend/src/styles/theme.css
-- [ ] T010 [US1] Update TodoList component to calculate isOverdue status for each todo in packages/frontend/src/components/TodoList.js
-- [ ] T011 [US1] Update TodoCard component to accept overdue prop and render red text + ⚠️ icon when true in packages/frontend/src/components/TodoCard.js
-- [ ] T012 [US1] Add aria-label to warning icon for accessibility in packages/frontend/src/components/TodoCard.js
-- [ ] T013 [US1] Add test for isOverdue() function with past/present/future/null dates in packages/frontend/src/components/__tests__/TodoList.test.js or packages/frontend/src/__tests__/
-- [ ] T014 [P] [US1] Add test for TodoCard rendering warning icon when overdue prop is true in packages/frontend/src/components/__tests__/TodoCard.test.js
-- [ ] T015 [P] [US1] Add test for TodoCard NOT showing overdue styling for future/current dates in packages/frontend/src/components/__tests__/TodoCard.test.js
-- [ ] T016 [P] [US1] Add test for TodoList passing correct overdue prop to TodoCard in packages/frontend/src/components/__tests__/TodoList.test.js
+- [X] T008 [P] [US1] Create isOverdue utility function in packages/frontend/src/utils/ (or inline in TodoList.js)
+- [X] T009 [P] [US1] Add CSS classes for overdue styling (.todo-overdue) in packages/frontend/src/styles/theme.css
+- [X] T010 [US1] Update TodoList component to calculate isOverdue status for each todo in packages/frontend/src/components/TodoList.js
+- [X] T011 [US1] Update TodoCard component to accept overdue prop and render red text + ⚠️ icon when true in packages/frontend/src/components/TodoCard.js
+- [X] T012 [US1] Add aria-label to warning icon for accessibility in packages/frontend/src/components/TodoCard.js
+- [X] T013 [US1] Add test for isOverdue() function with past/present/future/null dates in packages/frontend/src/components/__tests__/TodoList.test.js or packages/frontend/src/__tests__/
+- [X] T014 [P] [US1] Add test for TodoCard rendering warning icon when overdue prop is true in packages/frontend/src/components/__tests__/TodoCard.test.js
+- [X] T015 [P] [US1] Add test for TodoCard NOT showing overdue styling for future/current dates in packages/frontend/src/components/__tests__/TodoCard.test.js
+- [X] T016 [P] [US1] Add test for TodoList passing correct overdue prop to TodoCard in packages/frontend/src/components/__tests__/TodoList.test.js
 
 **Checkpoint**: At this point, User Story 1 should be fully functional - overdue todos are visually distinct in the UI
 
@@ -78,11 +78,11 @@ This is a web application with monorepo structure:
 
 ### Implementation for User Story 2
 
-- [ ] T017 [US2] Add CSS classes for completed-late styling (.todo-completed-late) in packages/frontend/src/styles/theme.css
-- [ ] T018 [US2] Update TodoCard component to check wasOverdueWhenCompleted flag and render completed-late styling in packages/frontend/src/components/TodoCard.js
-- [ ] T019 [US2] Add test for TodoCard showing completed-late styling when completed=true and wasOverdueWhenCompleted=true in packages/frontend/src/components/__tests__/TodoCard.test.js
-- [ ] T020 [P] [US2] Add test for TodoCard NOT showing completed-late styling when completed on time in packages/frontend/src/components/__tests__/TodoCard.test.js
-- [ ] T021 [P] [US2] Add integration test for complete workflow: create overdue todo → mark complete → verify wasOverdueWhenCompleted flag in packages/backend/__tests__/app.test.js or packages/frontend/src/__tests__/
+- [X] T017 [US2] Add CSS classes for completed-late styling (.todo-completed-late) in packages/frontend/src/styles/theme.css
+- [X] T018 [US2] Update TodoCard component to check wasOverdueWhenCompleted flag and render completed-late styling in packages/frontend/src/components/TodoCard.js
+- [X] T019 [US2] Add test for TodoCard showing completed-late styling when completed=true and wasOverdueWhenCompleted=true in packages/frontend/src/components/__tests__/TodoCard.test.js
+- [X] T020 [P] [US2] Add test for TodoCard NOT showing completed-late styling when completed on time in packages/frontend/src/components/__tests__/TodoCard.test.js
+- [X] T021 [P] [US2] Add integration test for complete workflow: create overdue todo → mark complete → verify wasOverdueWhenCompleted flag in packages/backend/__tests__/app.test.js or packages/frontend/src/__tests__/
 
 **Checkpoint**: At this point, both User Stories 1 AND 2 should work - users can identify overdue todos AND see historical "completed late" status
 
@@ -92,11 +92,11 @@ This is a web application with monorepo structure:
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T022 [P] Verify color contrast meets WCAG AA standards for overdue and completed-late styling in both light and dark modes
-- [ ] T023 [P] Test visual styling integration with Halloween theme (orange/red color palette)
-- [ ] T024 Validate all edge cases from spec.md: invalid dates, null dates, midnight transitions
-- [ ] T025 Run quickstart.md validation scenarios to confirm all acceptance criteria are met
-- [ ] T026 [P] Update project documentation if needed in docs/
+- [X] T022 [P] Verify color contrast meets WCAG AA standards for overdue and completed-late styling in both light and dark modes
+- [X] T023 [P] Test visual styling integration with Halloween theme (orange/red color palette)
+- [X] T024 Validate all edge cases from spec.md: invalid dates, null dates, midnight transitions
+- [X] T025 Run quickstart.md validation scenarios to confirm all acceptance criteria are met
+- [X] T026 [P] Update project documentation if needed in docs/
 
 ---
 

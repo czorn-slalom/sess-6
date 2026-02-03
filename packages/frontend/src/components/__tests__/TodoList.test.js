@@ -59,4 +59,101 @@ describe('TodoList Component', () => {
     expect(screen.getAllByLabelText(/Edit/)).toHaveLength(2);
     expect(screen.getAllByLabelText(/Delete/)).toHaveLength(2);
   });
+
+  describe('Overdue Status Calculation', () => {
+    // Mock current date to ensure consistent test results
+    beforeEach(() => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date('2026-02-03T12:00:00Z'));
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('should pass isOverdue=true for todos with past due dates', () => {
+      const overdueTodos = [
+        {
+          id: 1,
+          title: 'Overdue Todo',
+          dueDate: '2020-01-01',
+          completed: 0,
+          createdAt: '2025-11-01T00:00:00Z'
+        }
+      ];
+      
+      render(<TodoList todos={overdueTodos} {...mockHandlers} isLoading={false} />);
+      
+      const warningIcon = screen.getByRole('img', { name: 'Overdue' });
+      expect(warningIcon).toBeInTheDocument();
+    });
+
+    it('should pass isOverdue=false for todos with future due dates', () => {
+      const futureTodos = [
+        {
+          id: 1,
+          title: 'Future Todo',
+          dueDate: '2030-12-31',
+          completed: 0,
+          createdAt: '2025-11-01T00:00:00Z'
+        }
+      ];
+      
+      render(<TodoList todos={futureTodos} {...mockHandlers} isLoading={false} />);
+      
+      const warningIcon = screen.queryByRole('img', { name: 'Overdue' });
+      expect(warningIcon).not.toBeInTheDocument();
+    });
+
+    it('should pass isOverdue=false for todos with no due date', () => {
+      const noDateTodos = [
+        {
+          id: 1,
+          title: 'No Due Date',
+          dueDate: null,
+          completed: 0,
+          createdAt: '2025-11-01T00:00:00Z'
+        }
+      ];
+      
+      render(<TodoList todos={noDateTodos} {...mockHandlers} isLoading={false} />);
+      
+      const warningIcon = screen.queryByRole('img', { name: 'Overdue' });
+      expect(warningIcon).not.toBeInTheDocument();
+    });
+
+    it('should pass isOverdue=false for completed todos even with past due dates', () => {
+      const completedOverdueTodos = [
+        {
+          id: 1,
+          title: 'Completed Overdue',
+          dueDate: '2020-01-01',
+          completed: 1,
+          createdAt: '2025-11-01T00:00:00Z'
+        }
+      ];
+      
+      render(<TodoList todos={completedOverdueTodos} {...mockHandlers} isLoading={false} />);
+      
+      const warningIcon = screen.queryByRole('img', { name: 'Overdue' });
+      expect(warningIcon).not.toBeInTheDocument();
+    });
+
+    it('should handle invalid due dates gracefully', () => {
+      const invalidDateTodos = [
+        {
+          id: 1,
+          title: 'Invalid Date',
+          dueDate: 'invalid-date',
+          completed: 0,
+          createdAt: '2025-11-01T00:00:00Z'
+        }
+      ];
+      
+      render(<TodoList todos={invalidDateTodos} {...mockHandlers} isLoading={false} />);
+      
+      const warningIcon = screen.queryByRole('img', { name: 'Overdue' });
+      expect(warningIcon).not.toBeInTheDocument();
+    });
+  });
 });

@@ -99,4 +99,64 @@ describe('TodoCard Component', () => {
     
     expect(screen.queryByText(/Due:/)).not.toBeInTheDocument();
   });
+
+  describe('Overdue Functionality', () => {
+    it('should render warning icon when isOverdue prop is true', () => {
+      render(<TodoCard todo={mockTodo} {...mockHandlers} isLoading={false} isOverdue={true} />);
+      
+      const warningIcon = screen.getByRole('img', { name: 'Overdue' });
+      expect(warningIcon).toBeInTheDocument();
+      expect(warningIcon).toHaveTextContent('⚠️');
+    });
+
+    it('should not show warning icon when isOverdue is false', () => {
+      render(<TodoCard todo={mockTodo} {...mockHandlers} isLoading={false} isOverdue={false} />);
+      
+      const warningIcon = screen.queryByRole('img', { name: 'Overdue' });
+      expect(warningIcon).not.toBeInTheDocument();
+    });
+
+    it('should apply todo-overdue class when isOverdue is true', () => {
+      const { container } = render(
+        <TodoCard todo={mockTodo} {...mockHandlers} isLoading={false} isOverdue={true} />
+      );
+      
+      const card = container.querySelector('.todo-card');
+      expect(card).toHaveClass('todo-overdue');
+    });
+
+    it('should not apply overdue styling for completed todos', () => {
+      const completedTodo = { ...mockTodo, completed: 1 };
+      const { container } = render(
+        <TodoCard todo={completedTodo} {...mockHandlers} isLoading={false} isOverdue={false} />
+      );
+      
+      const card = container.querySelector('.todo-card');
+      expect(card).not.toHaveClass('todo-overdue');
+    });
+  });
+
+  describe('Completed Late Functionality', () => {
+    it('should apply todo-completed-late class when wasOverdueWhenCompleted is true', () => {
+      const completedLateTodo = { ...mockTodo, completed: 1, wasOverdueWhenCompleted: 1 };
+      const { container } = render(
+        <TodoCard todo={completedLateTodo} {...mockHandlers} isLoading={false} isOverdue={false} />
+      );
+      
+      const card = container.querySelector('.todo-card');
+      expect(card).toHaveClass('todo-completed-late');
+      expect(card).toHaveClass('completed');
+    });
+
+    it('should not apply completed-late class when completed on time', () => {
+      const completedOnTimeTodo = { ...mockTodo, completed: 1, wasOverdueWhenCompleted: 0 };
+      const { container } = render(
+        <TodoCard todo={completedOnTimeTodo} {...mockHandlers} isLoading={false} isOverdue={false} />
+      );
+      
+      const card = container.querySelector('.todo-card');
+      expect(card).not.toHaveClass('todo-completed-late');
+      expect(card).toHaveClass('completed');
+    });
+  });
 });

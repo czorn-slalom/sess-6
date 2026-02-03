@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
+function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading, isOverdue }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(todo.title);
   const [editDueDate, setEditDueDate] = useState(todo.dueDate || '');
@@ -62,6 +62,23 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
     });
   };
 
+  // Determine visual styling class
+  const getCardClass = () => {
+    const classes = ['todo-card'];
+    
+    if (todo.completed) {
+      classes.push('completed');
+      // Check if it was completed late
+      if (todo.wasOverdueWhenCompleted === 1) {
+        classes.push('todo-completed-late');
+      }
+    } else if (isOverdue) {
+      classes.push('todo-overdue');
+    }
+    
+    return classes.join(' ');
+  };
+
   if (isEditing) {
     return (
       <div className="todo-card todo-card-edit">
@@ -107,7 +124,7 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
   }
 
   return (
-    <div className={`todo-card ${todo.completed ? 'completed' : ''}`}>
+    <div className={getCardClass()}>
       <input
         type="checkbox"
         checked={todo.completed === 1}
@@ -118,7 +135,12 @@ function TodoCard({ todo, onToggle, onEdit, onDelete, isLoading }) {
       />
 
       <div className="todo-content">
-        <h3 className="todo-title">{todo.title}</h3>
+        <h3 className="todo-title">
+          {isOverdue && (
+            <span className="todo-overdue-icon" aria-label="Overdue" role="img">⚠️</span>
+          )}
+          {todo.title}
+        </h3>
         {todo.dueDate && (
           <p className="todo-due-date">
             Due: {formatDate(todo.dueDate)}

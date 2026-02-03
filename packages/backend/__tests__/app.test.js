@@ -199,6 +199,61 @@ describe('Todo API Endpoints', () => {
     });
   });
 
+  describe('PATCH /api/todos/:id/toggle - wasOverdueWhenCompleted', () => {
+    it('should initialize wasOverdueWhenCompleted to false when creating todo', async () => {
+      const createResponse = await request(app)
+        .post('/api/todos')
+        .send({ title: 'New Task', dueDate: '2026-12-31' });
+      expect(createResponse.status).toBe(201);
+      expect(createResponse.body.wasOverdueWhenCompleted).toBe(0);
+    });
+
+    it('should set wasOverdueWhenCompleted to true when completing overdue todo', async () => {
+      // Create a todo with a past due date
+      const createResponse = await request(app)
+        .post('/api/todos')
+        .send({ title: 'Overdue Task', dueDate: '2020-01-01' });
+      const todoId = createResponse.body.id;
+
+      // Mark as complete
+      const toggleResponse = await request(app).patch(`/api/todos/${todoId}/toggle`);
+      expect(toggleResponse.status).toBe(200);
+      expect(toggleResponse.body.completed).toBe(1);
+      expect(toggleResponse.body.wasOverdueWhenCompleted).toBe(1);
+    });
+
+    it('should keep wasOverdueWhenCompleted false when completing on-time todo', async () => {
+      // Create a todo with a future due date
+      const createResponse = await request(app)
+        .post('/api/todos')
+        .send({ title: 'Future Task', dueDate: '2030-12-31' });
+      const todoId = createResponse.body.id;
+
+      // Mark as complete
+      const toggleResponse = await request(app).patch(`/api/todos/${todoId}/toggle`);
+      expect(toggleResponse.status).toBe(200);
+      expect(toggleResponse.body.completed).toBe(1);
+      expect(toggleResponse.body.wasOverdueWhenCompleted).toBe(0);
+    });
+
+    it('should reset wasOverdueWhenCompleted to false when uncompleting todo', async () => {
+      // Create a todo with a past due date
+      const createResponse = await request(app)
+        .post('/api/todos')
+        .send({ title: 'Overdue Task', dueDate: '2020-01-01' });
+      const todoId = createResponse.body.id;
+
+      // Mark as complete (should set wasOverdueWhenCompleted to 1)
+      await request(app).patch(`/api/todos/${todoId}/toggle`);
+
+      // Unmark as complete
+      const toggleResponse = await request(app).patch(`/api/todos/${todoId}/toggle`);
+      expect(toggleResponse.status).toBe(200);
+      expect(toggleResponse.body.completed).toBe(0);
+      expect(toggleResponse.body.wasOverdueWhenCompleted).toBe(0);
+    });
+  });
+
   describe('DELETE /api/todos/:id', () => {
     it('should delete existing todo', async () => {
       const createResponse = await request(app).post('/api/todos').send({ title: 'Todo to Delete' });

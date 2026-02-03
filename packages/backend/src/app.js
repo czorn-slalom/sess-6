@@ -21,7 +21,8 @@ db.exec(`
     title TEXT NOT NULL,
     dueDate TEXT,
     completed BOOLEAN DEFAULT 0,
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    wasOverdueWhenCompleted INTEGER DEFAULT 0
   )
 `);
 
@@ -32,10 +33,10 @@ const initialTodos = [
   { title: 'Master Copilot', dueDate: null, completed: 1 }
 ];
 
-const insertStmt = db.prepare('INSERT INTO todos (title, dueDate, completed) VALUES (?, ?, ?)');
+const insertStmt = db.prepare('INSERT INTO todos (title, dueDate, completed, wasOverdueWhenCompleted) VALUES (?, ?, ?, ?)');
 
 initialTodos.forEach(todo => {
-  insertStmt.run(todo.title, todo.dueDate, todo.completed);
+  insertStmt.run(todo.title, todo.dueDate, todo.completed, 0);
 });
 
 console.log('In-memory database initialized with sample todos');
@@ -83,8 +84,8 @@ app.post('/api/todos', (req, res) => {
       return res.status(400).json({ error: 'Todo title must not exceed 255 characters' });
     }
 
-    const stmt = db.prepare('INSERT INTO todos (title, dueDate, completed) VALUES (?, ?, ?)');
-    const result = stmt.run(title.trim(), dueDate || null, 0);
+    const stmt = db.prepare('INSERT INTO todos (title, dueDate, completed, wasOverdueWhenCompleted) VALUES (?, ?, ?, ?)');
+    const result = stmt.run(title.trim(), dueDate || null, 0, 0);
     const id = result.lastInsertRowid;
 
     const newTodo = db.prepare('SELECT * FROM todos WHERE id = ?').get(id);
@@ -145,8 +146,27 @@ app.patch('/api/todos/:id/toggle', (req, res) => {
     }
 
     const newCompleted = existingTodo.completed ? 0 : 1;
-    const stmt = db.prepare('UPDATE todos SET completed = ? WHERE id = ?');
-    stmt.run(newCompleted, id);
+    
+    // Calculate wasOverdueWhenCompleted when marking as complete
+    let wasOverdueWhenCompleted = 0;
+    if (newCompleted === 1 && existingTodo.dueDate) {
+      const dueDate = new Date(existingTodo.dueDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      dueDate.setHours(0, 0, 0, 0);
+      
+      if (dueDate < today) {
+        wasOverdueWhenCompleted = 1;
+      }
+    }
+    
+    // Reset wasOverdueWhenCompleted when uncompleting
+    if (newCompleted === 0) {
+      wasOverdueWhenCompleted = 0;
+    }
+    
+    const stmt = db.prepare('UPDATE todos SET completed = ?, wasOverdueWhenCompleted = ? WHERE id = ?');
+    stmt.run(newCompleted, wasOverdueWhenCompleted, id);
 
     const updatedTodo = db.prepare('SELECT * FROM todos WHERE id = ?').get(id);
     res.json(updatedTodo);
@@ -202,8 +222,8 @@ app.post('/api/items', (req, res) => {
       return res.status(400).json({ error: 'Item name is required' });
     }
 
-    const stmt = db.prepare('INSERT INTO todos (title, dueDate, completed) VALUES (?, ?, ?)');
-    const result = stmt.run(name, null, 0);
+    const stmt = db.prepare('INSERT INTO todos (title, dueDate, completed, wasOverdueWhenCompleted) VALUES (?, ?, ?, ?)');
+    const result = stmt.run(name, null, 0, 0);
     const id = result.lastInsertRowid;
 
     const newItem = db.prepare('SELECT id, title as name, createdAt as created_at FROM todos WHERE id = ?').get(id);

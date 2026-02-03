@@ -15,6 +15,13 @@ This file contains high-level instructions for GitHub Copilot to follow when gen
 - Error Handling Requirements
 - Git Commit Discipline
 
+## Active Technologies
+
+- JavaScript (Node.js 18+, React 18.2.0) (001-overdue-todos)
+- Backend: Express + better-sqlite3
+- Frontend: React + React Testing Library
+- Testing: Jest + supertest
+
 ## Documentation Overview
 
 The project documentation will be built during the bootcamp sessions.
@@ -25,3 +32,7 @@ The project documentation will be built during the bootcamp sessions.
 - [Functional Requirements](../docs/functional-requirements.md) - Core functional requirements for the todo app
 - [UI Guidelines](../docs/ui-guidelines.md) - Design system and UI guidelines for the todo app
 - [Testing Guidelines](../docs/testing-guidelines.md) - Testing strategy and best practices
+
+## Recent Feature Plans
+
+- [001-overdue-todos](../specs/001-overdue-todos/plan.md) - Support for overdue todo items with visual identification

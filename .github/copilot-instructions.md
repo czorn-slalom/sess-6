@@ -2,12 +2,24 @@
 
 > **Note**: This file is located at `.github/copilot-instructions.md` and is used by GitHub Copilot to understand project context.
 
-This file contains high-level instructions for GitHub Copilot to follow when generating code for this project. For detailed guidance, refer to the documentation files in the `docs/` directory.
+This file contains high-level instructions for GitHub Copilot to follow when generating code for this project. For detailed guidance, refer to the documentation files in the `docs/` directory and the project constitution.
+
+## Project Constitution
+
+**All development MUST adhere to the [Project Constitution](../.specify/memory/constitution.md)**, which defines non-negotiable principles including:
+- Single Responsibility Principle
+- Test-First Development (80%+ coverage)
+- Code Quality Standards (formatting, naming, linting)
+- DRY and KISS Principles
+- SOLID Architecture
+- Error Handling Requirements
+- Git Commit Discipline
 
 ## Documentation Overview
 
 The project documentation will be built during the bootcamp sessions.
 
+- [Project Constitution](../.specify/memory/constitution.md) - **Governing principles and non-negotiable standards**
 - [Project Overview](../docs/project-overview.md) - Overview of the project
 - [Coding Guidelines](../docs/coding-guidelines.md) - Coding style, quality principles, and best practices
 - [Functional Requirements](../docs/functional-requirements.md) - Core functional requirements for the todo app
